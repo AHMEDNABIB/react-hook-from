@@ -1,23 +1,40 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm } from "react-hook-form";
 
-
 type FormValues = {
-	username: string,
-	email: string,
-	channel:string,
-}
+	username: string;
+	email: string;
+	channel: string;
+};
 
 function BasicFrom() {
-	const from = useForm<FormValues>()
-	const { register , control , handleSubmit , formState} = from
-	
+	const from = useForm<FormValues>({
+		// defaultValues: {
+		// 	username: "Ahmed Nabib",
+		// 	email: "",
+		// 	channel:""
+		// }
+		defaultValues: async () => {
+			const response = await fetch(
+				"https://jsonplaceholder.typicode.com/users/1"
+			);
+
+			const data = await response.json()
+			return {
+				username: "batman",
+				email: data.email,
+				channel: ""
+			}
+		}
+	});
+	const { register, control, handleSubmit, formState } = from;
+
 	const { errors } = formState;
 	// const {name,ref,onChange,onBlur}= register("username")
 
 	const onSubmit = (data: FormValues) => {
-		console.log('Form Submit',data)
-	}
+		console.log("Form Submit", data);
+	};
 
 	return (
 		<div>
@@ -35,7 +52,7 @@ function BasicFrom() {
 						},
 					})}
 				/>
-				<p>{errors.username?.message }</p>
+				<p>{errors.username?.message}</p>
 
 				<label htmlFor="email">E-mail</label>
 				<input
@@ -46,9 +63,16 @@ function BasicFrom() {
 							value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
 							message: "Invalid email format",
 						},
+
+						validate: (fieldValue) => {
+							return (
+								fieldValue !== "admin@gmail.com" ||
+								"Enter a different email address"
+							);
+						},
 					})}
 				/>
-				<p>{ errors.email?.message}</p>
+				<p>{errors.email?.message}</p>
 
 				<label htmlFor="channel">Channel</label>
 				<input
@@ -61,7 +85,7 @@ function BasicFrom() {
 						},
 					})}
 				/>
-				<p>{ errors.channel?.message}</p>
+				<p>{errors.channel?.message}</p>
 
 				<button>Submit</button>
 			</form>

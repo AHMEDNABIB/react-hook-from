@@ -8,7 +8,8 @@ type FormValues = {
 	social: {
 		twitter: string;
 		facebook: string;
-	}
+	};
+	phoneNumbers: string[];
 };
 
 function BasicFrom() {
@@ -20,7 +21,8 @@ function BasicFrom() {
 			social: {
 				twitter: "",
 				facebook:""
-			}
+			},
+			phoneNumbers: ["",""]
 		}
 		// defaultValues: async () => {
 		// 	const response = await fetch(
@@ -101,7 +103,13 @@ function BasicFrom() {
 					id="channel"
 					{...register("social.twitter")}
 				/>
-			
+
+				<label htmlFor="channel">Primary Number</label>
+				<input
+					type="text"
+					id="phoneNumber"
+					{...register("phoneNumbers.0")}
+				/>
 
 				<button>Submit</button>
 			</form>

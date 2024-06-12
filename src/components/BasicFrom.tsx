@@ -5,27 +5,35 @@ type FormValues = {
 	username: string;
 	email: string;
 	channel: string;
+	social: {
+		twitter: string;
+		facebook: string;
+	}
 };
 
 function BasicFrom() {
 	const from = useForm<FormValues>({
-		// defaultValues: {
-		// 	username: "Ahmed Nabib",
-		// 	email: "",
-		// 	channel:""
-		// }
-		defaultValues: async () => {
-			const response = await fetch(
-				"https://jsonplaceholder.typicode.com/users/1"
-			);
-
-			const data = await response.json()
-			return {
-				username: "batman",
-				email: data.email,
-				channel: ""
+		defaultValues: {
+			username: "Ahmed Nabib",
+			email: "",
+			channel: "",
+			social: {
+				twitter: "",
+				facebook:""
 			}
 		}
+		// defaultValues: async () => {
+		// 	const response = await fetch(
+		// 		"https://jsonplaceholder.typicode.com/users/1"
+		// 	);
+
+		// 	const data = await response.json()
+		// 	return {
+		// 		username: "batman",
+		// 		email: data.email,
+		// 		channel: ""
+		// 	}
+		// }
 	});
 	const { register, control, handleSubmit, formState } = from;
 
@@ -86,6 +94,14 @@ function BasicFrom() {
 					})}
 				/>
 				<p>{errors.channel?.message}</p>
+
+				<label htmlFor="channel">Twitter</label>
+				<input
+					type="text"
+					id="channel"
+					{...register("social.twitter")}
+				/>
+			
 
 				<button>Submit</button>
 			</form>
